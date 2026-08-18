@@ -28,7 +28,7 @@ public class UserController {
                     .body("Usuario ja existe");
        }
 
-       var userCreated = this.userRepository.save(userModel);
+       this.userRepository.save(userModel);
        return ResponseEntity
                .status(HttpStatus.CREATED)
                .body("Usuario criado com sucesso");
