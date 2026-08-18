@@ -1,5 +1,6 @@
 package br.com.limmazk.todolist.user;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +29,12 @@ public class UserController {
                     .body("Usuario ja existe");
        }
 
-       var userCreated = this.userRepository.save(userModel);
+       var passwordHashred = BCrypt.withDefaults()
+               .hashToString(12, userModel.getPassword().toCharArray());
+
+       userModel.setPassword(passwordHashred);
+
+       this.userRepository.save(userModel);
        return ResponseEntity
                .status(HttpStatus.CREATED)
                .body("Usuario criado com sucesso");
