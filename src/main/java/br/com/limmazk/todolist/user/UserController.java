@@ -29,6 +29,7 @@ public class UserController {
                     .body("Usuario ja existe");
        }
 
+
        var passwordHashred = BCrypt.withDefaults()
                .hashToString(12, userModel.getPassword().toCharArray());
 
