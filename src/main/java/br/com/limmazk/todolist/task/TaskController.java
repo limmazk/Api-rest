@@ -3,12 +3,10 @@ package br.com.limmazk.todolist.task;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -38,5 +36,20 @@ public class TaskController {
         var task = taskRepository.save(taskModel);
 
         return ResponseEntity.status(HttpStatus.OK).body(task);
+    }
+
+    @GetMapping()
+    public List<TaskModel> list(HttpServletRequest request) {
+        var idUser = request.getAttribute("idUser");
+        return taskRepository.findByIdUser((UUID) idUser);
+    }
+
+    @PutMapping("/{id}")
+    public TaskModel update(@RequestBody TaskModel taskModel, HttpServletRequest request, @PathVariable UUID id) {
+        var idUser = request.getAttribute("idUser");
+        System.out.println("IDUSER" + idUser);
+        taskModel.setIdUser((UUID) idUser);
+        taskModel.setId(id);
+        return taskRepository.save(taskModel);
     }
 }
